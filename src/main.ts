@@ -21,6 +21,7 @@ class Input {
   readonly debug: boolean
   readonly token: string | null
   readonly toolchain: string
+  readonly checkName: string | null
 
   constructor(
     manifestPath: string,
@@ -28,7 +29,8 @@ class Input {
     args: string[],
     debug: boolean,
     token: string | null,
-    toolchain: string
+    toolchain: string,
+    checkName: string | null
   ) {
     this.manifestPath = manifestPath
     this.command = command
@@ -36,6 +38,7 @@ class Input {
     this.debug = debug
     this.token = token
     this.toolchain = toolchain
+    this.checkName = checkName
   }
 
   /**
@@ -47,6 +50,7 @@ class Input {
     const rawArgs = getInput('args')
     const debug = getInput('debug') === 'true'
     const token: string | null = getInput('token') || null
+    const checkName = getInput('check-name') || null
     let toolchain = getInput('toolchain')
     if (toolchain) {
       if (toolchain.startsWith('+')) {
@@ -67,7 +71,15 @@ class Input {
       }
     }
 
-    return new Input(manifestPath, command, args, debug, token, toolchain)
+    return new Input(
+      manifestPath,
+      command,
+      args,
+      debug,
+      token,
+      toolchain,
+      checkName
+    )
   }
 }
 
@@ -91,7 +103,7 @@ async function main(): Promise<void> {
       input.token,
       githubContext.repo.owner,
       githubContext.repo.repo,
-      `cargo ${input.command}`,
+      input.checkName || `cargo ${input.command}`,
       headSHA
     )
   } else {

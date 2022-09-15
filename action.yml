@@ -17,6 +17,9 @@ inputs:
   toolchain:
     required: false
     description: 'Toolchain to use. For example: `nightly`'
+  check-name:
+    required: false
+    description: 'The name of the check to create'
 outputs:
   notice_count:
     description: 'notice count'
