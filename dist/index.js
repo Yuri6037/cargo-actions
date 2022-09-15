@@ -390,7 +390,7 @@ class GithubChecks {
                 annotations: this.popPreparedAnnotations(50)
             };
             if (this.id === undefined) {
-                const response = yield this.client.checks.create(options);
+                const response = yield this.client.rest.checks.create(options);
                 assert_1.default(response.status === 201, 'Response has bad status code, but RequestError not throws');
                 this.id = response.data.id;
                 options.check_run_id = this.id;

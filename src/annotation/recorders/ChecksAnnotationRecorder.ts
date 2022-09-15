@@ -2,9 +2,9 @@
 //
 // (c) Andrey Savitsky <contact@qroc.pro>
 
-import {AnnotationRecorder, Annotation, AnnotationLevel} from '../index'
-import {getOctokit} from '@actions/github'
-import {RequestError} from '@octokit/request-error'
+import { AnnotationRecorder, Annotation, AnnotationLevel } from '../index'
+import { getOctokit } from '@actions/github'
+import { RequestError } from '@octokit/request-error'
 import assert from 'assert'
 
 type GithubChecksCompleteConclusion =
@@ -167,7 +167,7 @@ class GithubChecks {
     }
 
     if (this.id === undefined) {
-      const response = await this.client.checks.create(options)
+      const response = await this.client.rest.checks.create(options)
       assert(
         response.status === 201,
         'Response has bad status code, but RequestError not throws'
