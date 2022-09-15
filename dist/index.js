@@ -396,13 +396,13 @@ class GithubChecks {
                 options.check_run_id = this.id;
             }
             else {
-                const response = yield this.client.checks.update(options);
+                const response = yield this.client.rest.checks.update(options);
                 assert_1.default(response.status === 200, 'Response has bad status code, but RequestError not throws');
             }
             let annotations = this.popPreparedAnnotations(50);
             while (annotations.length > 0) {
                 options.output.annotations = annotations;
-                const response = yield this.client.checks.update(options);
+                const response = yield this.client.rest.checks.update(options);
                 assert_1.default(response.status === 200, 'Response has bad status code, but RequestError not throws');
                 annotations = this.popPreparedAnnotations(50);
             }
@@ -412,7 +412,7 @@ class GithubChecks {
                 options.output.annotations = [];
                 options.conclusion = this.completedInfo.conclusion;
                 options.completed_at = this.completedInfo.completedAt.toISOString();
-                const response = yield this.client.checks.update(options);
+                const response = yield this.client.rest.checks.update(options);
                 assert_1.default(response.status === 200, 'Response has bad status code, but RequestError not throws');
             }
         });

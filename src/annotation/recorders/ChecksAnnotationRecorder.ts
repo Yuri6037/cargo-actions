@@ -176,7 +176,7 @@ class GithubChecks {
       this.id = response.data.id
       options.check_run_id = this.id
     } else {
-      const response = await this.client.checks.update(options)
+      const response = await this.client.rest.checks.update(options)
       assert(
         response.status === 200,
         'Response has bad status code, but RequestError not throws'
@@ -187,7 +187,7 @@ class GithubChecks {
     while (annotations.length > 0) {
       options.output.annotations = annotations
 
-      const response = await this.client.checks.update(options)
+      const response = await this.client.rest.checks.update(options)
       assert(
         response.status === 200,
         'Response has bad status code, but RequestError not throws'
@@ -204,7 +204,7 @@ class GithubChecks {
       options.conclusion = this.completedInfo.conclusion
       options.completed_at = this.completedInfo.completedAt.toISOString()
 
-      const response = await this.client.checks.update(options)
+      const response = await this.client.rest.checks.update(options)
       assert(
         response.status === 200,
         'Response has bad status code, but RequestError not throws'
