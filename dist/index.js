@@ -11,7 +11,11 @@
 // (c) Andrey Savitsky <contact@qroc.pro>
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
@@ -50,7 +54,7 @@ class Cargo {
         this.processOutputLine = (line) => {
             // eslint-disable-next-line no-invalid-this
             const listeners = this.listeners;
-            const [type, record] = messages_1.parseMessage(line);
+            const [type, record] = (0, messages_1.parseMessage)(line);
             switch (type) {
                 case messages_1.MessageType.CompilerArtifact:
                     return listeners.artifact(record);
@@ -347,7 +351,7 @@ class GithubChecks {
         this.startedAt = new Date();
         this.completedInfoMut = null;
         this.output = new GithubChecksOutput(this.name, 'No summary provided');
-        this.client = github_1.getOctokit(token);
+        this.client = (0, github_1.getOctokit)(token);
         this.owner = owner;
         this.repo = repo;
         this.id = undefined;
@@ -391,19 +395,19 @@ class GithubChecks {
             };
             if (this.id === undefined) {
                 const response = yield this.client.rest.checks.create(options);
-                assert_1.default(response.status === 201, 'Response has bad status code, but RequestError not throws');
+                (0, assert_1.default)(response.status === 201, 'Response has bad status code, but RequestError not throws');
                 this.id = response.data.id;
                 options.check_run_id = this.id;
             }
             else {
                 const response = yield this.client.rest.checks.update(options);
-                assert_1.default(response.status === 200, 'Response has bad status code, but RequestError not throws');
+                (0, assert_1.default)(response.status === 200, 'Response has bad status code, but RequestError not throws');
             }
             let annotations = this.popPreparedAnnotations(50);
             while (annotations.length > 0) {
                 options.output.annotations = annotations;
                 const response = yield this.client.rest.checks.update(options);
-                assert_1.default(response.status === 200, 'Response has bad status code, but RequestError not throws');
+                (0, assert_1.default)(response.status === 200, 'Response has bad status code, but RequestError not throws');
                 annotations = this.popPreparedAnnotations(50);
             }
             if (this.completedInfo !== null) {
@@ -413,7 +417,7 @@ class GithubChecks {
                 options.conclusion = this.completedInfo.conclusion;
                 options.completed_at = this.completedInfo.completedAt.toISOString();
                 const response = yield this.client.rest.checks.update(options);
-                assert_1.default(response.status === 200, 'Response has bad status code, but RequestError not throws');
+                (0, assert_1.default)(response.status === 200, 'Response has bad status code, but RequestError not throws');
             }
         });
     }
@@ -521,7 +525,7 @@ class CommandAnnotationRecorder {
             line: annotation.block.startLine,
             col: annotation.block.startColumn
         };
-        command_1.issueCommand(level, properties, annotation.message);
+        (0, command_1.issueCommand)(level, properties, annotation.message);
         this.stats[annotation.level]++;
     }
     addInfoTable(section, title, value, rows) {
@@ -549,7 +553,7 @@ class CommandAnnotationRecorder {
     finalize() {
         return __awaiter(this, void 0, void 0, function* () {
             if (this.info.length > 0) {
-                core_1.info(this.info.join('\n\n'));
+                (0, core_1.info)(this.info.join('\n\n'));
             }
         });
     }
@@ -624,7 +628,7 @@ class CompilerOutputListener {
         if (!record.success) {
             message += ' with errors';
         }
-        core_1.info(message);
+        (0, core_1.info)(message);
         return true;
     }
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -635,7 +639,7 @@ class CompilerOutputListener {
     compilerMessage(record) {
         var _a;
         this.bufferedStd.flush();
-        core_1.info(`Compiling ${record.package_id}`);
+        (0, core_1.info)(`Compiling ${record.package_id}`);
         const primarySpan = record.message.spans.find(span => span.is_primary);
         if (primarySpan === undefined) {
             this.bufferedStd.writeLine(record.message.message, false);
@@ -876,13 +880,13 @@ class Input {
      * @throws Error
      */
     static parseFromEnv() {
-        const manifestPath = core_1.getInput('manifest-path');
-        const command = core_1.getInput('command', { required: true });
-        const rawArgs = core_1.getInput('args');
-        const debug = core_1.getInput('debug') === 'true';
-        const token = core_1.getInput('token') || null;
-        const checkName = core_1.getInput('check-name') || null;
-        let toolchain = core_1.getInput('toolchain');
+        const manifestPath = (0, core_1.getInput)('manifest-path');
+        const command = (0, core_1.getInput)('command', { required: true });
+        const rawArgs = (0, core_1.getInput)('args');
+        const debug = (0, core_1.getInput)('debug') === 'true';
+        const token = (0, core_1.getInput)('token') || null;
+        const checkName = (0, core_1.getInput)('check-name') || null;
+        let toolchain = (0, core_1.getInput)('toolchain');
         if (toolchain) {
             if (toolchain.startsWith('+')) {
                 toolchain = toolchain.slice(1);
@@ -941,16 +945,16 @@ function main() {
             if (debugListener) {
                 yield debugListener.finalize();
             }
-            core_1.setOutput('notice_count', recorder.noticeCount());
-            core_1.setOutput('warning_count', recorder.warningCount());
-            core_1.setOutput('failure_count', recorder.failureCount());
+            (0, core_1.setOutput)('notice_count', recorder.noticeCount());
+            (0, core_1.setOutput)('warning_count', recorder.warningCount());
+            (0, core_1.setOutput)('failure_count', recorder.failureCount());
             yield recorder.finalize();
         }
     });
 }
 // eslint-disable-next-line github/no-then
 main().catch(e => {
-    core_1.setFailed(e.toString());
+    (0, core_1.setFailed)(e.toString());
 });
 
 
@@ -1040,10 +1044,10 @@ class BufferedStd {
     }
     flush() {
         if (this.isError) {
-            core_1.info(`\u001b[1m\u001b[38;2;255;0;0m${this.buffer}`);
+            (0, core_1.info)(`\u001b[1m\u001b[38;2;255;0;0m${this.buffer}`);
         }
         else {
-            core_1.info(`\u001b[35m${this.buffer}`);
+            (0, core_1.info)(`\u001b[35m${this.buffer}`);
         }
         this.buffer = '';
         this.isError = undefined;
@@ -1193,7 +1197,6 @@ const file_command_1 = __nccwpck_require__(717);
 const utils_1 = __nccwpck_require__(5278);
 const os = __importStar(__nccwpck_require__(2037));
 const path = __importStar(__nccwpck_require__(1017));
-const uuid_1 = __nccwpck_require__(5840);
 const oidc_utils_1 = __nccwpck_require__(8041);
 /**
  * The code to exit an action
@@ -1223,20 +1226,9 @@ function exportVariable(name, val) {
     process.env[name] = convertedVal;
     const filePath = process.env['GITHUB_ENV'] || '';
     if (filePath) {
-        const delimiter = `ghadelimiter_${uuid_1.v4()}`;
-        // These should realistically never happen, but just in case someone finds a way to exploit uuid generation let's not allow keys or values that contain the delimiter.
-        if (name.includes(delimiter)) {
-            throw new Error(`Unexpected input: name should not contain the delimiter "${delimiter}"`);
-        }
-        if (convertedVal.includes(delimiter)) {
-            throw new Error(`Unexpected input: value should not contain the delimiter "${delimiter}"`);
-        }
-        const commandValue = `${name}<<${delimiter}${os.EOL}${convertedVal}${os.EOL}${delimiter}`;
-        file_command_1.issueCommand('ENV', commandValue);
+        return file_command_1.issueFileCommand('ENV', file_command_1.prepareKeyValueMessage(name, val));
     }
-    else {
-        command_1.issueCommand('set-env', { name }, convertedVal);
-    }
+    command_1.issueCommand('set-env', { name }, convertedVal);
 }
 exports.exportVariable = exportVariable;
 /**
@@ -1254,7 +1246,7 @@ exports.setSecret = setSecret;
 function addPath(inputPath) {
     const filePath = process.env['GITHUB_PATH'] || '';
     if (filePath) {
-        file_command_1.issueCommand('PATH', inputPath);
+        file_command_1.issueFileCommand('PATH', inputPath);
     }
     else {
         command_1.issueCommand('add-path', {}, inputPath);
@@ -1294,7 +1286,10 @@ function getMultilineInput(name, options) {
     const inputs = getInput(name, options)
         .split('\n')
         .filter(x => x !== '');
-    return inputs;
+    if (options && options.trimWhitespace === false) {
+        return inputs;
+    }
+    return inputs.map(input => input.trim());
 }
 exports.getMultilineInput = getMultilineInput;
 /**
@@ -1327,8 +1322,12 @@ exports.getBooleanInput = getBooleanInput;
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function setOutput(name, value) {
+    const filePath = process.env['GITHUB_OUTPUT'] || '';
+    if (filePath) {
+        return file_command_1.issueFileCommand('OUTPUT', file_command_1.prepareKeyValueMessage(name, value));
+    }
     process.stdout.write(os.EOL);
-    command_1.issueCommand('set-output', { name }, value);
+    command_1.issueCommand('set-output', { name }, utils_1.toCommandValue(value));
 }
 exports.setOutput = setOutput;
 /**
@@ -1457,7 +1456,11 @@ exports.group = group;
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function saveState(name, value) {
-    command_1.issueCommand('save-state', { name }, value);
+    const filePath = process.env['GITHUB_STATE'] || '';
+    if (filePath) {
+        return file_command_1.issueFileCommand('STATE', file_command_1.prepareKeyValueMessage(name, value));
+    }
+    command_1.issueCommand('save-state', { name }, utils_1.toCommandValue(value));
 }
 exports.saveState = saveState;
 /**
@@ -1523,13 +1526,14 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.issueCommand = void 0;
+exports.prepareKeyValueMessage = exports.issueFileCommand = void 0;
 // We use any as a valid input type
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const fs = __importStar(__nccwpck_require__(7147));
 const os = __importStar(__nccwpck_require__(2037));
+const uuid_1 = __nccwpck_require__(5840);
 const utils_1 = __nccwpck_require__(5278);
-function issueCommand(command, message) {
+function issueFileCommand(command, message) {
     const filePath = process.env[`GITHUB_${command}`];
     if (!filePath) {
         throw new Error(`Unable to find environment variable for file command ${command}`);
@@ -1541,7 +1545,22 @@ function issueCommand(command, message) {
         encoding: 'utf8'
     });
 }
-exports.issueCommand = issueCommand;
+exports.issueFileCommand = issueFileCommand;
+function prepareKeyValueMessage(key, value) {
+    const delimiter = `ghadelimiter_${uuid_1.v4()}`;
+    const convertedValue = utils_1.toCommandValue(value);
+    // These should realistically never happen, but just in case someone finds a
+    // way to exploit uuid generation let's not allow keys or values that contain
+    // the delimiter.
+    if (key.includes(delimiter)) {
+        throw new Error(`Unexpected input: name should not contain the delimiter "${delimiter}"`);
+    }
+    if (convertedValue.includes(delimiter)) {
+        throw new Error(`Unexpected input: value should not contain the delimiter "${delimiter}"`);
+    }
+    return `${key}<<${delimiter}${os.EOL}${convertedValue}${os.EOL}${delimiter}`;
+}
+exports.prepareKeyValueMessage = prepareKeyValueMessage;
 //# sourceMappingURL=file-command.js.map
 
 /***/ }),
@@ -2863,8 +2882,9 @@ exports.context = new Context.Context();
  * @param     token    the repo PAT or GITHUB_TOKEN
  * @param     options  other options to set
  */
-function getOctokit(token, options) {
-    return new utils_1.GitHub(utils_1.getOctokitOptions(token, options));
+function getOctokit(token, options, ...additionalPlugins) {
+    const GitHubWithPlugins = utils_1.GitHub.plugin(...additionalPlugins);
+    return new GitHubWithPlugins(utils_1.getOctokitOptions(token, options));
 }
 exports.getOctokit = getOctokit;
 //# sourceMappingURL=github.js.map
@@ -2946,7 +2966,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getOctokitOptions = exports.GitHub = exports.context = void 0;
+exports.getOctokitOptions = exports.GitHub = exports.defaults = exports.context = void 0;
 const Context = __importStar(__nccwpck_require__(4087));
 const Utils = __importStar(__nccwpck_require__(7914));
 // octokit + plugins
@@ -2955,13 +2975,13 @@ const plugin_rest_endpoint_methods_1 = __nccwpck_require__(3044);
 const plugin_paginate_rest_1 = __nccwpck_require__(4193);
 exports.context = new Context.Context();
 const baseUrl = Utils.getApiBaseUrl();
-const defaults = {
+exports.defaults = {
     baseUrl,
     request: {
         agent: Utils.getProxyAgent(baseUrl)
     }
 };
-exports.GitHub = core_1.Octokit.plugin(plugin_rest_endpoint_methods_1.restEndpointMethods, plugin_paginate_rest_1.paginateRest).defaults(defaults);
+exports.GitHub = core_1.Octokit.plugin(plugin_rest_endpoint_methods_1.restEndpointMethods, plugin_paginate_rest_1.paginateRest).defaults(exports.defaults);
 /**
  * Convience function to correctly format Octokit Options to pass into the constructor.
  *
