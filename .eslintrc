@@ -13,10 +13,18 @@
     "project": "./tsconfig.json"
   },
   "rules": {
+    "i18n-text/no-en": "off",
+    "filenames/match-regex": "off",
     "eslint-comments/no-use": "off",
     "import/no-namespace": "off",
     "no-unused-vars": "off",
-    "@typescript-eslint/no-unused-vars": ["error", { "vars": "all", "args": "after-used" }],
+    "@typescript-eslint/no-unused-vars": [
+      "error",
+      {
+        "vars": "all",
+        "args": "after-used"
+      }
+    ],
     "@typescript-eslint/explicit-member-accessibility": [
       "error",
       {
@@ -67,7 +75,9 @@
     "@typescript-eslint/type-annotation-spacing": "error",
     "@typescript-eslint/unbound-method": "error",
     "no-shadow": "off",
-    "@typescript-eslint/no-shadow": ["error"]
+    "@typescript-eslint/no-shadow": [
+      "error"
+    ]
   },
   "env": {
     "node": true,

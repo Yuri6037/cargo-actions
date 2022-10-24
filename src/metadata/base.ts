@@ -2,7 +2,7 @@
 //
 // (c) Andrey Savitsky <contact@qroc.pro>
 
-import {DependencyKind, Dependency} from './dependency'
+import { DependencyKind, Dependency } from './dependency'
 
 /// The underlying string representation of package id.
 export type PackageId = string

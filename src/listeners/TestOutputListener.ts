@@ -2,9 +2,9 @@
 //
 // (c) Andrey Savitsky <contact@qroc.pro>
 
-import {CargoOutputListener} from '../CargoOutputListener'
-import {Annotation, AnnotationBlock, AnnotationRecorder} from '../annotation'
-import {CargoProject} from '../CargoProject'
+import { CargoOutputListener } from '../CargoOutputListener'
+import { Annotation, AnnotationBlock, AnnotationRecorder } from '../annotation'
+import { CargoProject } from '../CargoProject'
 import {
   Artifact,
   CompilerMessage,
@@ -19,8 +19,10 @@ export class TestOutputListener implements CargoOutputListener {
   private project: CargoProject
   private logs: Record<string, TestStatus>
 
-  private static regexFull = /test (?<file>.+) - (?<test>.+) \(line (?<line>\d+)\) ... (?<status>ok|ignored|FAILED)/
-  private static regexShort = /test (?<test>.+) ... (?<status>ok|ignored|FAILED)/
+  private static regexFull =
+    /test (?<file>.+) - (?<test>.+) \(line (?<line>\d+)\) ... (?<status>ok|ignored|FAILED)/
+  private static regexShort =
+    /test (?<test>.+) ... (?<status>ok|ignored|FAILED)/
 
   constructor(recorder: AnnotationRecorder, project: CargoProject) {
     this.recorder = recorder

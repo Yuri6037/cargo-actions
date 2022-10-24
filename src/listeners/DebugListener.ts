@@ -2,14 +2,14 @@
 //
 // (c) Andrey Savitsky <contact@qroc.pro>
 
-import {CargoOutputListener} from '../CargoOutputListener'
+import { CargoOutputListener } from '../CargoOutputListener'
 import {
   Artifact,
   CompilerMessage,
   BuildScript,
   BuildFinished
 } from '../metadata/messages'
-import {promises as fs} from 'fs'
+import { promises as fs } from 'fs'
 
 export class DebugListener implements CargoOutputListener {
   private readonly outputFile: string

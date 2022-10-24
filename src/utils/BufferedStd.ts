@@ -2,7 +2,7 @@
 //
 // (c) Andrey Savitsky <contact@qroc.pro>
 
-import {info} from '@actions/core'
+import { info } from '@actions/core'
 
 export class BufferedStd {
   private buffer = ''

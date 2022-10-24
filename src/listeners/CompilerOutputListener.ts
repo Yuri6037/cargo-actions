@@ -2,23 +2,23 @@
 //
 // (c) Andrey Savitsky <contact@qroc.pro>
 
-import {CargoOutputListener} from '../CargoOutputListener'
+import { CargoOutputListener } from '../CargoOutputListener'
 import {
   AnnotationLevel,
   AnnotationRecorder,
   AnnotationBlock,
   Annotation
 } from '../annotation'
-import {CargoProject} from '../CargoProject'
+import { CargoProject } from '../CargoProject'
 import {
   Artifact,
   CompilerMessage,
   BuildScript,
   BuildFinished
 } from '../metadata/messages'
-import {DiagnosticLevel} from '../metadata/diagnostic'
-import {BufferedStd} from '../utils/BufferedStd'
-import {info} from '@actions/core'
+import { DiagnosticLevel } from '../metadata/diagnostic'
+import { BufferedStd } from '../utils/BufferedStd'
+import { info } from '@actions/core'
 
 export class CompilerOutputListener implements CargoOutputListener {
   private recorder: AnnotationRecorder

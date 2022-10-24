@@ -2,8 +2,8 @@
 //
 // (c) Andrey Savitsky <contact@qroc.pro>
 
-import {Diagnostic} from './diagnostic'
-import {PackageId, Target} from './base'
+import { Diagnostic } from './diagnostic'
+import { PackageId, Target } from './base'
 
 /// Profile settings used to determine which compiler flags to use for a target.
 export interface ArtifactProfile {
