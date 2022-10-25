@@ -52,7 +52,6 @@ class Cargo {
     constructor(project) {
         ///
         this.processOutputLine = (line) => {
-            // eslint-disable-next-line no-invalid-this
             const listeners = this.listeners;
             const [type, record] = (0, messages_1.parseMessage)(line);
             switch (type) {
@@ -71,7 +70,6 @@ class Cargo {
         };
         ///
         this.processErrorLine = (line) => {
-            // eslint-disable-next-line no-invalid-this
             return this.listeners.textLine(line, true);
         };
         this.project = project;
@@ -86,12 +84,17 @@ class Cargo {
         return __awaiter(this, void 0, void 0, function* () {
             let outBuffer = '';
             let errBuffer = '';
+            const copy = {};
+            for (const e in process.env)
+                copy[e] = process.env[e];
+            copy['CARGO_TERM_COLOR'] = 'never';
             const resultCode = yield exec.exec('cargo', [
                 this.project.toolchain,
                 command,
                 this.isFormatterSupport(command) ? '--message-format=json' : '',
                 ...args
             ].filter(Boolean), {
+                env: copy,
                 cwd: `${process.cwd()}/${this.project.manifestPath}`,
                 silent: true,
                 ignoreReturnCode: true,

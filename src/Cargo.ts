@@ -2,7 +2,10 @@
 //
 // (c) Andrey Savitsky <contact@qroc.pro>
 
-import {CargoOutputListener, CargoOutputListeners} from './CargoOutputListener'
+import {
+  CargoOutputListener,
+  CargoOutputListeners
+} from './CargoOutputListener'
 import * as exec from '@actions/exec'
 import {
   Artifact,
@@ -12,7 +15,7 @@ import {
   MessageType,
   parseMessage
 } from './metadata/messages'
-import {CargoProject} from './CargoProject'
+import { CargoProject } from './CargoProject'
 
 ///
 export class Cargo {
@@ -37,6 +40,9 @@ export class Cargo {
   async runCommand(command: string, args: string[]): Promise<number> {
     let outBuffer = ''
     let errBuffer = ''
+    const copy: { [key: string]: string } = {}
+    for (const e in process.env) copy[e] = process.env[e] as string
+    copy['CARGO_TERM_COLOR'] = 'never'
     const resultCode = await exec.exec(
       'cargo',
       [
@@ -46,6 +52,7 @@ export class Cargo {
         ...args
       ].filter(Boolean),
       {
+        env: copy,
         cwd: `${process.cwd()}/${this.project.manifestPath}`,
         silent: true,
         ignoreReturnCode: true,
@@ -76,7 +83,6 @@ export class Cargo {
 
   ///
   private processOutputLine = (line: string): boolean => {
-    // eslint-disable-next-line no-invalid-this
     const listeners = this.listeners
     const [type, record] = parseMessage(line)
     switch (type) {
@@ -97,7 +103,6 @@ export class Cargo {
 
   ///
   private processErrorLine = (line: string): boolean => {
-    // eslint-disable-next-line no-invalid-this
     return this.listeners.textLine(line, true)
   }
 
